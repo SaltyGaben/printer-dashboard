@@ -1,0 +1,23 @@
+{
+  "editor.detectIndentation": false,
+  "editor.insertSpaces": false, // use tabs
+  "editor.tabSize": 2,          // for TypeScript
+  "[vue]": {
+    "editor.tabSize": 4          // for Vue templates
+  },
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+  "eslint.validate": ["javascript", "typescript", "vue"],
+	"files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.classAttributes": ["class", "ui"],
+  "tailwindCSS.experimental.classRegex": [
+    ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ]
+}

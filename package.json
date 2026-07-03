@@ -7,11 +7,31 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
   },
   "dependencies": {
+    "@nuxt/devtools": "4.0.0-alpha.7",
+    "@nuxt/eslint": "1.16.0",
+    "@nuxt/ui": "^4.9.0",
+    "eslint": "^9.0.0 || ^10.0.0",
     "nuxt": "^4.4.8",
+    "tailwindcss": "^4.3.2",
+    "vite": ">=6.0",
     "vue": "^3.5.38",
     "vue-router": "^5.1.0"
-  }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.0",
+    "@commitlint/config-conventional": "^21.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8"
+  },
+	"lint-staged": {
+		"*.{js,ts,tsx,jsx,vue}": [
+			"eslint --fix"
+		]
+	}
 }
