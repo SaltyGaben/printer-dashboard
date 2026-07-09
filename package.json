@@ -30,6 +30,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.0",
     "@commitlint/config-conventional": "^21.2.0",
+    "@iconify-json/lucide": "^1.2.116",
     "@types/ws": "^8.18.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.8"

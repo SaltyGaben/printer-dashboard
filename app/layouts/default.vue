@@ -1,27 +1,20 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 
-const router = useRouter()
-
 const baseItems: NavigationMenuItem[] = [
-	{
-		label: 'Home',
-		icon: 'i-lucide-house',
-		to: '/'
-	},
 	{
 		label: 'Dashboard',
 		icon: 'i-lucide-house',
 		to: '/dashboard'
 	},
 	{
-		label: 'Files',
-		icon: 'i-lucide-history',
-		to: '/files',
+		label: 'Requests',
+		icon: 'i-lucide-package-plus',
+		to: '/requests',
 	},
 	{
 		label: 'Prints',
-		icon: 'i-lucide-users',
+		icon: 'i-lucide-images',
 		to: '/prints',
 	}
 ]

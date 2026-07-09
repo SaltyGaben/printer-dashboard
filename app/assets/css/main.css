@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+body {
+	@apply bg-neutral-50 text-neutral-950 dark:bg-[#0a0f1f] dark:text-slate-200;
+}
+
+button:hover {
+	cursor: pointer;
+}

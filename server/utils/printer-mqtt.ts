@@ -1,5 +1,14 @@
 import mqtt from "mqtt"
 
+export type ActivePrint = {
+	printDuration?: number
+	remainingTime?: number
+	totalDuration?: number
+	currentLayer?: number
+	fileName?: string
+	state?: string
+}
+
 export type PrinterStatus = {
 	nozzleTemp?: number
 	nozzleTarget?: number
@@ -13,6 +22,8 @@ export type PrinterStatus = {
 	caseFan?: string
 	controllerFan?: string
 	heaterFan?: string
+	status?: string
+	activePrint?: ActivePrint
 }
 
 let latestStatus: PrinterStatus = {}
@@ -20,6 +31,25 @@ let client: mqtt.MqttClient | null = null
 let requestId = 0
 let serial: string | null = null
 let pingInterval: ReturnType<typeof setInterval> | null = null
+
+let printerState: Record<string, any> = {}
+
+const deepMerge = (target: any, source: any): any => {
+	for (const key in source) {
+		if (
+			source[key] &&
+			typeof source[key] === "object" &&
+			!Array.isArray(source[key])
+		) {
+			target[key] ??= {}
+			deepMerge(target[key], source[key])
+		} else {
+			target[key] = source[key]
+		}
+	}
+
+	return target
+}
 
 const clientId = `1_PC_${Math.floor(Math.random() * 10 ** 14)}`
 const requestIdPrefix = `${clientId}_req`
@@ -37,19 +67,45 @@ const mapStatus = (result: any): PrinterStatus => ({
 	caseFan: result?.fans?.box_fan?.speed,
 	controllerFan: result?.fans?.controller_fan?.speed,
 	heaterFan: result?.fans?.heater_fan?.speed,
+	status: result?.machine_status?.status,
+	activePrint: {
+		printDuration: result?.print_status?.print_duration,
+		remainingTime: result?.print_status?.remaining_time_sec,
+		totalDuration: result?.print_status?.total_duration,
+		currentLayer: result?.print_status?.current_layer,
+		fileName: result?.print_status?.filename,
+		state: result?.print_status?.state
+	}
 })
 
-const removeUndefined = <T extends Record<string, unknown>>(obj: T): Partial<T> => {
-	return Object.fromEntries(
-		Object.entries(obj).filter(([, value]) => value !== undefined),
-	) as Partial<T>
+const isPlainObject = (value: unknown): value is Record<string, any> => {
+	return !!value && typeof value === "object" && !Array.isArray(value)
+}
+
+const mergeDefined = (
+	current: Record<string, any>,
+	patch: Record<string, any>,
+): Record<string, any> => {
+	const next: Record<string, any> = { ...current }
+
+	for (const [key, value] of Object.entries(patch)) {
+		if (value === undefined) {
+			continue
+		}
+
+		if (isPlainObject(value) && isPlainObject(next[key])) {
+			next[key] = mergeDefined(next[key], value)
+			continue
+		}
+
+		next[key] = value
+	}
+
+	return next
 }
 
 const mergeStatus = (partialStatus: PrinterStatus) => {
-	latestStatus = {
-		...latestStatus,
-		...removeUndefined(partialStatus),
-	}
+	latestStatus = mergeDefined(latestStatus, partialStatus)
 }
 
 export const getPrinterMqtt = () => {
@@ -100,6 +156,9 @@ export const getPrinterMqtt = () => {
 
 	client.on("message", (_topic, payload) => {
 		const data = JSON.parse(payload.toString())
+
+		printerState = deepMerge(printerState, data)
+
 		const partialStatus = mapStatus(data.result ?? data)
 
 		mergeStatus(partialStatus)
