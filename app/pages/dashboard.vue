@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LogCard from '~/components/LogCard.vue'
 import type { PrinterStatus } from '~~/server/utils/printer-mqtt'
 
 const { public: { printerIp } } = useRuntimeConfig()
@@ -8,6 +7,7 @@ const videoUrl = ref("")
 const cameraMinimized = ref(false)
 
 const { data: status, refresh } = await useFetch<PrinterStatus>("/api/printer/status")
+const { data: sensors } = await useFetch("/api/dirigera/sensors")
 
 useIntervalFn(() => {
 	refresh()
@@ -38,7 +38,7 @@ onBeforeUnmount(closeCamera)
 </script>
 
 <template>
-	<div class="grid grid-cols-2 gap-10">
+	<div class="grid grid-cols-2 gap-4">
 		<PrintingStatusCard :status="status?.activePrint" :progress="status?.progress"/>
 		<UCard variant="soft" class="w-full h-fit">
 			<template #header>
@@ -58,7 +58,6 @@ onBeforeUnmount(closeCamera)
 				class="w-full"
 			>
 		</UCard>
-		<PrinterStatusCard :status="status"/>
-		<LogCard :data="status" />
+		<PrinterStatusCard :status="status" :sensors="sensors"/>
 	</div>
 </template>

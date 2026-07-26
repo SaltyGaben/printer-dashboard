@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { PrinterStatus } from '~~/server/utils/printer-mqtt'
 
+
 defineProps<{
 	status?: PrinterStatus
+	sensors?: any
 }>()
 
 const pwmToPercent = (value?: string) => {
@@ -95,6 +97,30 @@ const pwmToPercent = (value?: string) => {
 						<p class="text-sm text-muted">Heater Fan</p>
 						<p class="text-lg font-semibold">
 							{{ pwmToPercent(status?.heaterFan) }}%
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<USeparator />
+
+			<div class="space-y-2">
+				<div class="flex items-center justify-between">
+					<h3 class="text-lg font-semibold">Sensors</h3>
+				</div>
+
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+					<div class="rounded-lg border border-default p-3">
+						<p class="text-sm text-muted">Temperature</p>
+						<p class="text-lg font-semibold">
+							{{ sensors?.temperature }}
+						</p>
+					</div>
+
+					<div class="rounded-lg border border-default p-3">
+						<p class="text-sm text-muted">Humidity</p>
+						<p class="text-lg font-semibold">
+							{{ sensors?.humidity }}%
 						</p>
 					</div>
 				</div>

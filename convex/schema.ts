@@ -10,11 +10,14 @@ export default defineSchema({
 		role: v.optional(v.union(v.literal('viewer'), v.literal('admin'))),
 	}).index("by_externalId", ["externalId"]),
 	print_request: defineTable({
-		storageId: v.optional(v.id("_storage")),
 		name: v.string(),
 		description: v.optional(v.string()),
 		link: v.optional(v.string()),
-		uploadedBy: v.string(),
+		storageId: v.optional(v.id("_storage")),
+		status: v.union(v.literal('pending'), v.literal('completed'), v.literal('rejected')),
+		requestedBy: v.string(),
+		cost: v.optional(v.number()),
+		weight: v.optional(v.number()),
 		uploadedAt: v.number(),
-	})
+	}).index('by_status', ['status'])
 })

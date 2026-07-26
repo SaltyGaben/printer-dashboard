@@ -15,6 +15,8 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		printerAccessCode: "",
 		printerSerial: "",
+		dirigeraAccessToken: "",
+		dirigeraId: "",
 		public: {
 			printerIp: "",
 		},

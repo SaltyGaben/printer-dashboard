@@ -63,7 +63,7 @@ const formatDuration = (seconds?: number) => {
 				/>
 			</div>
 
-			<div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+			<div class="grid grid-cols-2 gap-3">
 				<UCard variant="subtle">
 					<p class="text-xs text-muted uppercase tracking-wide">
 						Elapsed

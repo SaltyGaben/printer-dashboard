@@ -17,7 +17,10 @@ export const savePrintRequest = mutation({
 		name: v.string(),
 		description: v.optional(v.string()),
 		link: v.optional(v.string()),
-		uploadedBy: v.string(),
+		requestedBy: v.string(),
+		status:v.union(v.literal('pending'), v.literal('completed'), v.literal('rejected')),
+		cost: v.optional(v.number()),
+		weight: v.optional(v.number())
 	},
 	handler: async (ctx, args) => {
 		await ctx.db.insert('print_request', {
