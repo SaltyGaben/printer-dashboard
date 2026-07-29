@@ -7,6 +7,7 @@ export default defineNuxtConfig({
 		"@nuxt/eslint",
 		"convex-nuxt",
 		"@vueuse/nuxt",
+		'@clerk/nuxt'
 	],
 	css: ["~/assets/css/main.css"],
 	convex: {

@@ -35,6 +35,8 @@ export const usePrintRequest = () => {
 	
 			uploadedFile = result.storageId
 		}
+
+		const user = await convex.query(api.users.current, {})
 	
 		await convex.mutation(api.request.savePrintRequest, {
 			name: form.name,
@@ -42,7 +44,7 @@ export const usePrintRequest = () => {
 			link: form.link || undefined,
 			storageId: uploadedFile,
 			status: 'pending',
-			requestedBy: 'Hampus'
+			requestedBy: user?.username ?? 'Unkown User'
 		})
 	}
 

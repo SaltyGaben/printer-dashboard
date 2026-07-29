@@ -8,7 +8,9 @@
  * @module
  */
 
+import type * as http from "../http.js";
 import type * as request from "../request.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -17,7 +19,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  http: typeof http;
   request: typeof request;
+  users: typeof users;
 }>;
 
 /**

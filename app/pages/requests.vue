@@ -17,7 +17,7 @@ const { copy } = useClipboard()
 
 const { data: requestData, isPending } = useConvexQuery(api.request.getPrintRequests)
 const { mutate: deleteRequest } = useConvexMutation(api.request.deletePrintRequest)
-
+const { data: userData } = useConvexQuery(api.users.current)
 
 const columns: TableColumn<PrintRequest>[] = [
 	{
@@ -165,6 +165,10 @@ const openRequestModal = (_e: Event, row: TableRow<PrintRequest> | null) => {
 	}
 }
 
+const isAdmin = () => {
+	return userData.value?.role === 'admin'
+}
+
 </script>
 
 <template>
@@ -260,6 +264,7 @@ const openRequestModal = (_e: Event, row: TableRow<PrintRequest> | null) => {
 
 						<UTooltip text="Remove Request">
 							<UButton
+								:disabled="!isAdmin()"
 								icon="i-lucide-trash-2"
 								variant="ghost"
 								color="error"
@@ -293,6 +298,11 @@ const openRequestModal = (_e: Event, row: TableRow<PrintRequest> | null) => {
 					<div>
 						<p class="text-sm text-muted">Status</p>
 						<p>{{ selectedRequest?.status }}</p>
+					</div>
+
+					<div>
+						<p class="text-sm text-muted">Uploaded By</p>
+						<p>{{ selectedRequest?.requestedBy }}</p>
 					</div>
 				</div>
 			</template>
